@@ -1391,3 +1391,85 @@ footer a:hover {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
 }
+
+/* Order Tracking Timeline */
+.order-card {
+    border-radius: 16px;
+    border: 1px solid rgba(139, 75, 140, 0.1);
+    overflow: hidden;
+}
+
+.order-card .card-header {
+    border-bottom: 1px solid rgba(139, 75, 140, 0.1);
+}
+
+.order-tracking {
+    padding: 10px 0;
+}
+
+.tracking-step {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.tracking-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.tracking-icon.bg-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.tracking-icon.bg-secondary {
+    background: #dee2e6 !important;
+    color: #6c757d;
+}
+
+.tracking-step small {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.tracking-step.active small {
+    color: var(--primary-color);
+}
+
+.tracking-line {
+    flex: 1;
+    height: 3px;
+    background: #dee2e6;
+    margin: 0 5px;
+    margin-top: -18px;
+    z-index: 0;
+    border-radius: 3px;
+}
+
+.tracking-line.active {
+    background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+/* Orders Section Styling */
+#orders {
+    background: linear-gradient(180deg, #faf8f5 0%, #ffffff 100%);
+    min-height: 50vh;
+    padding-top: 100px;
+}
+
+#orders h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+}

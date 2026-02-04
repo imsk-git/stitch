@@ -689,48 +689,117 @@ function updateOrdersUI() {
     }
     
     if (orders.length === 0) {
-        ordersContainer.innerHTML = '<p class="text-center text-muted">No orders found</p>';
+        ordersContainer.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                <h5 class="text-muted">No orders yet</h5>
+                <p class="text-muted">Your orders will appear here once you place them.</p>
+                <a href="#categories" class="btn btn-primary">Start Shopping</a>
+            </div>
+        `;
         return;
     }
     
     ordersContainer.innerHTML = '';
     
-    orders.forEach(order => {
-        const orderDate = new Date(order.createdAt).toLocaleDateString();
-        const orderCard = document.createElement('div');
-        orderCard.className = 'card mb-3';
-        orderCard.innerHTML = `
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="mb-0">Order #${order._id.slice(-6)}</h6>
-                <div>
-                    <span class="badge bg-success">${order.status}</span>
-                    <small class="text-muted ms-2">${orderDate}</small>
+    // Sort orders by date (newest first)
+    const sortedOrders = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    sortedOrders.forEach(order => {
+        const orderDate = new Date(order.createdAt).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Status badge colors
+        const statusColors = {
+            'Placed': 'primary',
+            'Processing': 'info',
+            'Shipped': 'warning',
+            'Delivered': 'success',
+            'Cancelled': 'danger'
+        };
+        const badgeColor = statusColors[order.status] || 'secondary';
+        
+        // Order tracking steps
+        const statusSteps = ['Placed', 'Processing', 'Shipped', 'Delivered'];
+        const currentStepIndex = statusSteps.indexOf(order.status);
+        const isCancelled = order.status === 'Cancelled';
+        
+        // Generate items HTML with null check
+        const itemsHtml = order.items.map(item => {
+            const productName = item.productId?.name || 'Product Unavailable';
+            const productImage = item.productId?.image || '';
+            return `
+                <div class="d-flex align-items-center mb-2 p-2 bg-light rounded">
+                    <img src="${productImage}" alt="${productName}" 
+                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;"
+                         onerror="this.src='https://via.placeholder.com/50x50?text=Product'">
+                    <div class="ms-3 flex-grow-1">
+                        <div class="fw-bold">${productName}</div>
+                        <small class="text-muted">Qty: ${item.quantity} × ₹${item.price}</small>
+                    </div>
+                    <strong>₹${item.quantity * item.price}</strong>
                 </div>
+            `;
+        }).join('');
+        
+        // Order tracking timeline HTML
+        const trackingHtml = isCancelled ? `
+            <div class="alert alert-danger mb-0">
+                <i class="fas fa-times-circle"></i> Order Cancelled
+            </div>
+        ` : `
+            <div class="order-tracking d-flex justify-content-between align-items-center">
+                ${statusSteps.map((step, index) => `
+                    <div class="tracking-step text-center ${index <= currentStepIndex ? 'active' : ''}">
+                        <div class="tracking-icon ${index <= currentStepIndex ? 'bg-success' : 'bg-secondary'}">
+                            <i class="fas ${index <= currentStepIndex ? 'fa-check' : 'fa-circle'}"></i>
+                        </div>
+                        <small class="d-block mt-1">${step}</small>
+                    </div>
+                    ${index < statusSteps.length - 1 ? `<div class="tracking-line ${index < currentStepIndex ? 'active' : ''}"></div>` : ''}
+                `).join('')}
+            </div>
+        `;
+        
+        const orderCard = document.createElement('div');
+        orderCard.className = 'order-card card mb-4 shadow-sm';
+        orderCard.innerHTML = `
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <h5 class="mb-0">Order #${order._id.slice(-8).toUpperCase()}</h5>
+                    <small class="text-muted"><i class="fas fa-calendar-alt"></i> ${orderDate}</small>
+                </div>
+                <span class="badge bg-${badgeColor} fs-6">${order.status}</span>
             </div>
             <div class="card-body">
+                <!-- Order Tracking Timeline -->
+                <div class="mb-4 p-3 bg-light rounded">
+                    <h6 class="mb-3"><i class="fas fa-truck"></i> Order Tracking</h6>
+                    ${trackingHtml}
+                </div>
+                
                 <div class="row">
-                    <div class="col-md-8">
-                        <h6>Items:</h6>
-                        ${order.items.map(item => `
-                            <div class="d-flex align-items-center mb-2">
-                                <img src="${item.productId.image}" alt="${item.productId.name}" 
-                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
-                                     onerror="this.src='https://via.placeholder.com/50x50?text=Product'">
-                                <div class="ms-3">
-                                    <div class="fw-bold">${item.productId.name}</div>
-                                    <small class="text-muted">Qty: ${item.quantity} × ₹${item.price}</small>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div class="col-md-7">
+                        <h6><i class="fas fa-shopping-bag"></i> Items</h6>
+                        ${itemsHtml}
                     </div>
-                    <div class="col-md-4">
-                        <h6>Delivery Details:</h6>
-                        <p class="mb-1"><strong>${order.customerInfo.name}</strong></p>
-                        <p class="mb-1">${order.customerInfo.email}</p>
-                        <p class="mb-1">${order.customerInfo.phone}</p>
-                        <p class="mb-1">${order.customerInfo.address}</p>
-                        <hr>
-                        <h5 class="text-primary">Total: ₹${order.totalAmount}</h5>
+                    <div class="col-md-5">
+                        <h6><i class="fas fa-map-marker-alt"></i> Delivery Details</h6>
+                        <div class="bg-light p-3 rounded">
+                            <p class="mb-1"><strong>${order.customerInfo?.name || 'N/A'}</strong></p>
+                            <p class="mb-1"><i class="fas fa-envelope text-muted"></i> ${order.customerInfo?.email || 'N/A'}</p>
+                            <p class="mb-1"><i class="fas fa-phone text-muted"></i> ${order.customerInfo?.phone || 'N/A'}</p>
+                            <p class="mb-0"><i class="fas fa-home text-muted"></i> ${order.customerInfo?.address || 'N/A'}</p>
+                        </div>
+                        <div class="mt-3 p-3 bg-primary bg-opacity-10 rounded text-center">
+                            <small class="text-muted">Total Amount</small>
+                            <h4 class="text-primary mb-0">₹${order.totalAmount?.toLocaleString() || 0}</h4>
+                        </div>
                     </div>
                 </div>
             </div>
