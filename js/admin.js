@@ -288,12 +288,16 @@ function showAddCategoryModal() {
     document.getElementById('categoryId').value = '';
     document.getElementById('categoryImage').value = '';
     document.getElementById('categoryImagePreview').style.display = 'none';
-    new bootstrap.Modal(document.getElementById('categoryModal')).show();
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categoryModal'));
+    modal.show();
 }
 
 async function editCategory(categoryId) {
     const category = adminCategories.find(c => c._id === categoryId);
-    if (!category) return;
+    if (!category) {
+        alert('Category not found');
+        return;
+    }
     
     document.getElementById('categoryModalTitle').textContent = 'Edit Category';
     document.getElementById('categoryId').value = category._id;
@@ -310,7 +314,8 @@ async function editCategory(categoryId) {
         preview.style.display = 'none';
     }
     
-    new bootstrap.Modal(document.getElementById('categoryModal')).show();
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('categoryModal'));
+    modal.show();
 }
 
 async function handleCategorySubmit(e) {
@@ -428,7 +433,8 @@ function showAddProductModal() {
     document.getElementById('productImagePreview').style.display = 'none';
     document.getElementById('productInStock').checked = true;
     loadCategories();
-    new bootstrap.Modal(document.getElementById('productModal')).show();
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('productModal'));
+    modal.show();
 }
 
 async function editProduct(productId) {
@@ -454,7 +460,8 @@ async function editProduct(productId) {
             preview.style.display = 'none';
         }
         
-        new bootstrap.Modal(document.getElementById('productModal')).show();
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('productModal'));
+        modal.show();
     } catch (error) {
         console.error('Error loading product:', error);
     }
