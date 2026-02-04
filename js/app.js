@@ -259,7 +259,8 @@ async function handleLogin(e) {
             bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
             showAlert('Login successful!', 'success');
         } else {
-            showAlert(data.message, 'danger');
+            // Show helpful message suggesting registration
+            showAlert('Invalid credentials. Not registered yet? Please register first!', 'warning');
         }
     } catch (error) {
         showAlert('Login failed. Please try again.', 'danger');
