@@ -11,6 +11,9 @@ const API_BASE = '/api';
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
+    // Scroll to top on page load/refresh
+    window.scrollTo(0, 0);
+    
     checkAuthStatus();
     loadCategories();
     loadProducts();
