@@ -301,7 +301,9 @@ body {
 .hero-image-1 {
     border-radius: 20px;
     box-shadow: 0 30px 60px rgba(139, 75, 140, 0.2);
-    max-width: 100%;
+    max-width: 400px;
+    max-height: 350px;
+    object-fit: cover;
     transition: transform 0.5s ease;
 }
 
@@ -311,11 +313,14 @@ body {
 
 .hero-image-2 {
     position: absolute;
-    bottom: -30px;
-    left: -40px;
+    bottom: -20px;
+    left: -30px;
     border-radius: 15px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    border: 5px solid white;
+    border: 4px solid white;
+    max-width: 180px;
+    max-height: 180px;
+    object-fit: cover;
     animation: floatSmall 4s ease-in-out infinite;
 }
 
