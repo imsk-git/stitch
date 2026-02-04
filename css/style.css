@@ -691,6 +691,9 @@ section {
 .about-image {
     border-radius: 20px;
     box-shadow: 0 30px 60px rgba(139, 75, 140, 0.2);
+    width: 500px;
+    height: 600px;
+    object-fit: cover;
 }
 
 .experience-badge {
