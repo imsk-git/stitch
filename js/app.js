@@ -539,10 +539,18 @@ async function handleCheckout(e) {
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
     
     if (paymentMethod === 'WhatsApp') {
+        // Filter valid cart items (exclude deleted products)
+        const validCartItems = cart.filter(item => item.productId && item.productId._id);
+        
+        if (validCartItems.length === 0) {
+            showAlert('No valid products in cart. Please add items first.', 'warning');
+            return;
+        }
+        
         // Create WhatsApp message with order details
-        const cartTotal = cart.reduce((sum, item) => sum + (item.productId.price * item.quantity), 0);
-        const itemsList = cart.map(item => 
-            `• ${item.productId.name} (Qty: ${item.quantity}) - ₹${item.productId.price * item.quantity}`
+        const cartTotal = validCartItems.reduce((sum, item) => sum + ((item.productId.price || 0) * (item.quantity || 1)), 0);
+        const itemsList = validCartItems.map(item => 
+            `• ${item.productId.name || 'Product'} (Qty: ${item.quantity || 1}) - ₹${(item.productId.price || 0) * (item.quantity || 1)}`
         ).join('\n');
         
         const message = `🛒 *New Order from Stitch*\n\n` +
@@ -555,8 +563,8 @@ async function handleCheckout(e) {
             `*Total: ₹${cartTotal}*\n\n` +
             `Payment: Cash on Delivery`;
         
-        // Open WhatsApp with the message (replace with your business number)
-        const whatsappNumber = '919876543210'; // Replace with actual business number
+        // Open WhatsApp with the message
+        const whatsappNumber = '9779876543210'; // Nepal number format
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         

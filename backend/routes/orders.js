@@ -14,7 +14,14 @@ router.post('/', auth, async (req, res) => {
       return res.status(400).json({ message: 'Cart is empty' });
     }
 
-    const orderItems = cart.items.map(item => ({
+    // Filter out items with null productId (deleted products)
+    const validItems = cart.items.filter(item => item.productId && item.productId._id);
+    
+    if (validItems.length === 0) {
+      return res.status(400).json({ message: 'No valid products in cart. Some products may have been removed.' });
+    }
+
+    const orderItems = validItems.map(item => ({
       productId: item.productId._id,
       quantity: item.quantity,
       price: item.productId.price
@@ -36,7 +43,8 @@ router.post('/', auth, async (req, res) => {
 
     res.status(201).json({ message: 'Order placed successfully', orderId: order._id });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Order creation error:', error);
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 });
 
