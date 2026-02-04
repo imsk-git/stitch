@@ -32,6 +32,12 @@ function fileToBase64(file) {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
+    // Clear any stuck modal backdrops from previous sessions
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    
     checkAdminAuth();
     setupEventListeners();
 });
@@ -311,10 +317,17 @@ async function handleCategorySubmit(e) {
     e.preventDefault();
     
     const categoryId = document.getElementById('categoryId').value;
+    let imageValue = document.getElementById('categoryImage').value;
+    
+    // Use default image if no image provided
+    if (!imageValue) {
+        imageValue = 'https://via.placeholder.com/400x300?text=Category';
+    }
+    
     const categoryData = {
         name: document.getElementById('categoryName').value,
         description: document.getElementById('categoryDescription').value,
-        image: document.getElementById('categoryImage').value
+        image: imageValue
     };
     
     try {
@@ -330,7 +343,12 @@ async function handleCategorySubmit(e) {
         });
         
         if (response.ok) {
-            bootstrap.Modal.getInstance(document.getElementById('categoryModal')).hide();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('categoryModal'));
+            if (modal) modal.hide();
+            // Remove any leftover backdrop
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
             loadCategories();
             loadStats();
         } else {
@@ -339,6 +357,7 @@ async function handleCategorySubmit(e) {
         }
     } catch (error) {
         console.error('Error saving category:', error);
+        alert('Error saving category. Please try again.');
     }
 }
 
@@ -445,11 +464,18 @@ async function handleProductSubmit(e) {
     e.preventDefault();
     
     const productId = document.getElementById('productId').value;
+    let imageValue = document.getElementById('productImage').value;
+    
+    // Use default image if no image provided
+    if (!imageValue) {
+        imageValue = 'https://via.placeholder.com/300x250?text=Product+Image';
+    }
+    
     const productData = {
         name: document.getElementById('productName').value,
         description: document.getElementById('productDescription').value,
         price: parseFloat(document.getElementById('productPrice').value),
-        image: document.getElementById('productImage').value,
+        image: imageValue,
         category: document.getElementById('productCategory').value,
         inStock: document.getElementById('productInStock').checked
     };
@@ -467,7 +493,12 @@ async function handleProductSubmit(e) {
         });
         
         if (response.ok) {
-            bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('productModal'));
+            if (modal) modal.hide();
+            // Remove any leftover backdrop
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
             loadProducts();
             loadStats();
         } else {
@@ -475,6 +506,7 @@ async function handleProductSubmit(e) {
         }
     } catch (error) {
         console.error('Error saving product:', error);
+        alert('Error saving product. Please try again.');
     }
 }
 
