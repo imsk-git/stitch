@@ -11,7 +11,10 @@ const API_BASE = '/api';
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
-    // Scroll to top on page load/refresh
+    // Scroll to top on page load/refresh (disable browser scroll restoration)
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
     window.scrollTo(0, 0);
     
     checkAuthStatus();
@@ -70,6 +73,33 @@ function setupEventListeners() {
             }
         });
     });
+}
+
+// Handle search
+function handleSearch(e) {
+    e.preventDefault();
+    const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+    
+    if (!searchQuery) {
+        displayProducts(products);
+        return;
+    }
+    
+    // Filter products by name or description
+    const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(searchQuery) ||
+        product.description.toLowerCase().includes(searchQuery)
+    );
+    
+    // Show products section and scroll to it
+    showSection('products');
+    document.getElementById('productsSectionBadge').textContent = 'Search Results';
+    document.getElementById('productsSectionTitle').textContent = `Results for "${searchQuery}"`;
+    
+    displayProducts(filteredProducts);
+    
+    // Scroll to products section
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
 }
 
 // Load categories from API
