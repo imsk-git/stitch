@@ -475,7 +475,11 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Phone (WhatsApp)</label>
-                            <input type="tel" class="form-control" id="checkoutPhone" required>
+                            <input type="tel" class="form-control" id="checkoutPhone" required 
+                                   pattern="[0-9]{10}" maxlength="10" minlength="10"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                   placeholder="Enter 10 digit mobile number"
+                                   title="Please enter exactly 10 digit mobile number">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Address</label>
