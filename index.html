@@ -29,10 +29,10 @@
                 </ul>
                 <!-- Search Bar - Expandable on Hover -->
                 <div class="search-wrapper me-3">
-                    <form class="d-flex" id="searchForm" onsubmit="handleSearch(event)">
+                    <form class="d-flex" id="searchForm" onsubmit="return handleSearch(event)">
                         <div class="search-box">
                             <input type="text" class="form-control search-input" id="searchInput" placeholder="Search products..." aria-label="Search">
-                            <button class="btn search-btn" type="submit">
+                            <button class="btn search-btn" type="submit" onclick="handleSearch(event)">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -182,10 +182,6 @@
                             </div>
                             <div class="about-feature">
                                 <i class="fas fa-award"></i>
-                                <div>
-                                    <strong>Award-Winning</strong>
-                                    <p>Recognized for exceptional craftsmanship</p>
-                                </div>
                             </div>
                             <div class="about-feature">
                                 <i class="fas fa-leaf"></i>
@@ -483,5 +479,106 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        // Debug: Verify this script runs
+        console.log('Inline script loaded');
+        
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM ready - setting up search handlers');
+            
+            // Get search elements
+            const searchForm = document.getElementById('searchForm');
+            const searchBtn = document.querySelector('.search-btn');
+            const searchInput = document.getElementById('searchInput');
+            
+            console.log('Search form found:', !!searchForm);
+            console.log('Search button found:', !!searchBtn);
+            console.log('Search input found:', !!searchInput);
+            
+            // Direct form submit handler
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Form submitted!');
+                    performSearch();
+                    return false;
+                });
+            }
+            
+            // Direct button click handler
+            if (searchBtn) {
+                searchBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Search button clicked!');
+                    performSearch();
+                    return false;
+                });
+            }
+            
+            // Enter key handler
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        console.log('Enter pressed!');
+                        performSearch();
+                    }
+                });
+            }
+        });
+        
+        // Search function
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            
+            console.log('Performing search for:', query);
+            console.log('Products available:', typeof products !== 'undefined' ? products.length : 'products not defined');
+            
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+            
+            if (typeof products === 'undefined' || products.length === 0) {
+                alert('Products are still loading. Please wait and try again.');
+                return;
+            }
+            
+            // Filter products
+            const results = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query)
+            );
+            
+            console.log('Found', results.length, 'products');
+            
+            // Show products section
+            const categoriesSection = document.getElementById('categories');
+            const productsSection = document.getElementById('products');
+            
+            if (categoriesSection) categoriesSection.style.display = 'none';
+            if (productsSection) {
+                productsSection.style.display = 'block';
+                
+                // Update header
+                const badge = document.getElementById('productsSectionBadge');
+                const title = document.getElementById('productsSectionTitle');
+                if (badge) badge.textContent = 'Search Results';
+                if (title) title.textContent = 'Results for "' + query + '"';
+                
+                // Display products using existing function
+                if (typeof displayProducts === 'function') {
+                    displayProducts(results);
+                }
+                
+                // Scroll to products
+                productsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>

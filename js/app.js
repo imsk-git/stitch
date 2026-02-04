@@ -63,6 +63,35 @@ function setupEventListeners() {
     // Checkout form
     document.getElementById('checkoutForm').addEventListener('submit', handleCheckout);
     
+    // Search form
+    const searchForm = document.getElementById('searchForm');
+    if (searchForm) {
+        searchForm.addEventListener('submit', handleSearch);
+    }
+    
+    // Search button click (backup handler)
+    const searchBtn = document.querySelector('.search-btn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function(e) {
+            // Only trigger if form submit didn't already handle it
+            const form = document.getElementById('searchForm');
+            if (form) {
+                handleSearch(e);
+            }
+        });
+    }
+    
+    // Search on Enter key in input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch(e);
+            }
+        });
+    }
+    
     // Smooth scrolling for navigation
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -77,12 +106,35 @@ function setupEventListeners() {
 
 // Handle search
 function handleSearch(e) {
-    e.preventDefault();
-    const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    console.log('handleSearch called'); // Debug log
+    
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) {
+        console.log('Search input not found!');
+        return false;
+    }
+    
+    const searchQuery = searchInput.value.trim().toLowerCase();
+    console.log('Search query:', searchQuery); // Debug log
+    console.log('Products loaded:', products.length); // Debug log
     
     if (!searchQuery) {
-        displayProducts(products);
-        return;
+        // Show categories section if empty search
+        document.getElementById('categories').style.display = 'block';
+        document.getElementById('products').style.display = 'none';
+        document.getElementById('categories').scrollIntoView({ behavior: 'smooth' });
+        return false;
+    }
+    
+    // Check if products are loaded
+    if (products.length === 0) {
+        console.log('No products loaded yet, waiting...'); // Debug log
+        alert('Products are still loading. Please wait a moment and try again.');
+        return false;
     }
     
     // Filter products by name or description
@@ -91,8 +143,13 @@ function handleSearch(e) {
         product.description.toLowerCase().includes(searchQuery)
     );
     
-    // Show products section and scroll to it
-    showSection('products');
+    console.log('Filtered products:', filteredProducts.length); // Debug log
+    
+    // Hide categories section and show products section
+    document.getElementById('categories').style.display = 'none';
+    document.getElementById('products').style.display = 'block';
+    
+    // Update products section header
     document.getElementById('productsSectionBadge').textContent = 'Search Results';
     document.getElementById('productsSectionTitle').textContent = `Results for "${searchQuery}"`;
     
@@ -100,6 +157,8 @@ function handleSearch(e) {
     
     // Scroll to products section
     document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    
+    return false;
 }
 
 // Load categories from API
@@ -212,20 +271,15 @@ function displayProducts(productsToDisplay = products) {
     });
 }
 
-// Search products
-function handleSearch(e) {
-    e.preventDefault();
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+// Search products (helper function called by handleSearch above)
+function showSearchResults(filteredProducts, searchTerm) {
+    // Show products section and hide categories
+    document.getElementById('categories').style.display = 'none';
+    document.getElementById('products').style.display = 'block';
     
-    if (!searchTerm) {
-        displayProducts();
-        return;
-    }
-    
-    const filteredProducts = products.filter(product => {
-        return product.name.toLowerCase().includes(searchTerm) ||
-               product.description.toLowerCase().includes(searchTerm);
-    });
+    // Update products section header
+    document.getElementById('productsSectionBadge').textContent = 'Search Results';
+    document.getElementById('productsSectionTitle').textContent = searchTerm ? `Results for "${searchTerm}"` : 'All Products';
     
     displayProducts(filteredProducts);
     
