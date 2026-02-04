@@ -482,9 +482,12 @@ function updateCartUI() {
     const cartTotal = document.getElementById('cartTotal');
     const checkoutBtn = document.getElementById('checkoutBtn');
     
-    cartCount.textContent = cart.length;
+    // Filter out items with null/undefined productId (deleted products)
+    const validCartItems = cart.filter(item => item.productId && item.productId._id);
     
-    if (cart.length === 0) {
+    cartCount.textContent = validCartItems.length;
+    
+    if (validCartItems.length === 0) {
         cartItems.innerHTML = '<p class="text-center text-muted">Your cart is empty</p>';
         cartTotal.textContent = '0';
         checkoutBtn.disabled = true;
@@ -494,17 +497,19 @@ function updateCartUI() {
     let total = 0;
     cartItems.innerHTML = '';
     
-    cart.forEach(item => {
-        const itemTotal = item.productId.price * item.quantity;
+    validCartItems.forEach(item => {
+        const price = item.productId.price || 0;
+        const quantity = item.quantity || 1;
+        const itemTotal = price * quantity;
         total += itemTotal;
         
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item d-flex align-items-center';
         cartItem.innerHTML = `
-            <img src="${item.productId.image}" alt="${item.productId.name}" onerror="this.src='https://via.placeholder.com/80x80?text=Product'">
+            <img src="${item.productId.image || ''}" alt="${item.productId.name || 'Product'}" onerror="this.src='https://via.placeholder.com/80x80?text=Product'">
             <div class="flex-grow-1 ms-3">
-                <h6 class="mb-1">${item.productId.name}</h6>
-                <p class="mb-0 text-muted">₹${item.productId.price} x ${item.quantity}</p>
+                <h6 class="mb-1">${item.productId.name || 'Unknown Product'}</h6>
+                <p class="mb-0 text-muted">₹${price} x ${quantity}</p>
             </div>
             <div class="text-end">
                 <strong>₹${itemTotal}</strong>
