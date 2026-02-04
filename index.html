@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch - Handmade Embroidery & Painting | Mrs. Ranjula Kumari</title>
+    <meta name="description" content="Discover beautiful handmade embroidery and paintings by Mrs. Ranjula Kumari. Madhubani Art, Canvas Paintings, and unique handcrafted items.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Fixed Header -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-palette"></i> Stitch
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#categories">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+                <!-- Search Bar - Expandable on Hover -->
+                <div class="search-wrapper me-3">
+                    <form class="d-flex" id="searchForm" onsubmit="handleSearch(event)">
+                        <div class="search-box">
+                            <input type="text" class="form-control search-input" id="searchInput" placeholder="Search products..." aria-label="Search">
+                            <button class="btn search-btn" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="navbar-nav">
+                    <div id="authButtons">
+                        <button class="btn btn-primary btn-sm me-2" onclick="showLogin()">Login</button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="showRegister()">Register</button>
+                    </div>
+                    <div id="userInfo" style="display: none;">
+                        <button class="btn btn-outline-primary btn-sm me-2" onclick="showCart()">
+                            <i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span>
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm me-2" onclick="showOrders()">
+                            <i class="fas fa-box"></i> Orders
+                        </button>
+                        <span class="navbar-text me-2" style="font-size: 0.875rem;">Hi, <strong id="userName"></strong></span>
+                        <button class="btn btn-outline-danger btn-sm" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6 hero-content">
+                    <span class="hero-badge">✨ Handcrafted with Love</span>
+                    <h1 class="hero-title">
+                        Discover the Art of<br>
+                        <span class="text-gradient">Handmade Beauty</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Exquisite Madhubani paintings, intricate embroidery, and unique handcrafted pieces 
+                        created by the talented Mrs. Ranjula Kumari
+                    </p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>100% Handmade</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Unique Designs</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Fast Delivery</span>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="#categories" class="btn btn-primary btn-lg">
+                            <i class="fas fa-shopping-bag"></i> Shop Now
+                        </a>
+                        <a href="#about" class="btn btn-outline-primary btn-lg">
+                            Learn More <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 hero-image-wrapper">
+                    <div class="hero-image-container">
+                        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&h=500&fit=crop" alt="Madhubani Art" class="hero-image hero-image-1">
+                        <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=300&h=250&fit=crop" alt="Embroidery" class="hero-image hero-image-2">
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <strong>500+</strong>
+                                <span>Happy Customers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Strip -->
+    <section class="features-strip">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 feature-col">
+                    <div class="feature-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h5>Madhubani Art</h5>
+                    <p>Traditional Mithila paintings</p>
+                </div>
+                <div class="col-md-3 col-6 feature-col">
+                    <div class="feature-icon"><i class="fas fa-cut"></i></div>
+                    <h5>Embroidery</h5>
+                    <p>Handcrafted textile art</p>
+                </div>
+                <div class="col-md-3 col-6 feature-col">
+                    <div class="feature-icon"><i class="fas fa-gem"></i></div>
+                    <h5>Accessories</h5>
+                    <p>Unique handmade jewelry</p>
+                </div>
+                <div class="col-md-3 col-6 feature-col">
+                    <div class="feature-icon"><i class="fas fa-home"></i></div>
+                    <h5>Home Decor</h5>
+                    <p>Beautiful home accents</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="py-5 categories-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-badge">Shop By Category</span>
+                <h2>Explore Our Collections</h2>
+                <p>Browse our handcrafted categories and discover unique art pieces</p>
+            </div>
+            <div class="row" id="categoriesContainer">
+                <!-- Categories will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section (hidden by default, shown when category is clicked) -->
+    <section id="products" class="py-5 products-section" style="display: none;">
+        <div class="container">
+            <div class="products-header">
+                <button class="btn btn-outline-primary back-btn" onclick="showCategories()">
+                    <i class="fas fa-arrow-left"></i> Back to Categories
+                </button>
+                <div class="section-header text-center">
+                    <span class="section-badge" id="productsSectionBadge">Category</span>
+                    <h2 id="productsSectionTitle">Products</h2>
+                </div>
+            </div>
+            <div class="row" id="productsContainer">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500&h=600&fit=crop" alt="Artist at work" class="about-image">
+                        <div class="experience-badge">
+                            <span class="years">15+</span>
+                            <span class="text">Years of<br>Experience</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <span class="section-badge">About the Artist</span>
+                        <h2>Meet Mrs. Ranjula Kumari</h2>
+                        <p class="lead">
+                            A passionate artist with over 15 years of experience in creating beautiful 
+                            handmade embroidery and traditional painting pieces.
+                        </p>
+                        <p>
+                            Mrs. Ranjula Kumari has dedicated her life to preserving and promoting 
+                            traditional art forms. Her work combines age-old techniques with contemporary 
+                            designs, creating pieces that are both timeless and modern.
+                        </p>
+                        <div class="about-features">
+                            <div class="about-feature">
+                                <i class="fas fa-heart"></i>
+                                <div>
+                                    <strong>Passion-Driven</strong>
+                                    <p>Every piece is crafted with love and dedication</p>
+                                </div>
+                            </div>
+                            <div class="about-feature">
+                                <i class="fas fa-award"></i>
+                                <div>
+                                    <strong>Award-Winning</strong>
+                                    <p>Recognized for exceptional craftsmanship</p>
+                                </div>
+                            </div>
+                            <div class="about-feature">
+                                <i class="fas fa-leaf"></i>
+                                <div>
+                                    <strong>Eco-Friendly</strong>
+                                    <p>Uses natural and sustainable materials</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-badge">Testimonials</span>
+                <h2>What Our Customers Say</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"Absolutely beautiful work! The Madhubani painting I ordered exceeded my expectations. True artistry!"</p>
+                        <div class="testimonial-author">
+                            <strong>Priya Sharma</strong>
+                            <span>Delhi</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"The embroidery work is so detailed and beautiful. It's now the centerpiece of my living room!"</p>
+                        <div class="testimonial-author">
+                            <strong>Anita Gupta</strong>
+                            <span>Mumbai</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"Fast delivery and amazing quality. Will definitely order again. Highly recommended!"</p>
+                        <div class="testimonial-author">
+                            <strong>Rahul Verma</strong>
+                            <span>Bangalore</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span class="section-badge light">Get in Touch</span>
+                    <h2>Let's Create Something Beautiful Together</h2>
+                    <p>Have questions about our products or want to place a custom order? We'd love to hear from you!</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <strong>Email Us</strong>
+                                <p>ranjula.kumari@email.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <strong>Call Us</strong>
+                                <p>+91 98765 43210</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <strong>Visit Us</strong>
+                                <p>Madhubani, Bihar, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="contact-form-wrapper">
+                        <form id="contactForm" onsubmit="handleContactForm(event)">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="contactName" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" id="contactEmail" placeholder="Your Email" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="contactMessage" rows="4" placeholder="Your Message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-light btn-lg w-100">
+                                Send Message <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                        <div id="contactSuccess" class="contact-success" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Message Sent!</h4>
+                            <p>Thank you for contacting us. We'll get back to you soon!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section id="cart" class="py-5" style="display: none;">
+        <div class="container">
+            <h2 class="mb-4">Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="text-end">
+                <h4>Total: ₹<span id="cartTotal">0</span></h4>
+                <button class="btn btn-success btn-lg" onclick="showCheckout()" id="checkoutBtn" disabled>Place Order</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders Section -->
+    <section id="orders" class="py-5" style="display: none;">
+        <div class="container">
+            <h2 class="mb-4">My Orders</h2>
+            <div id="ordersContainer">
+                <p class="text-center text-muted">Please login to view your orders</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4><i class="fas fa-palette"></i> Stitch</h4>
+                    <p>Handcrafted with love by Mrs. Ranjula Kumari. Bringing traditional art to modern homes.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="col-md-4">
+                    <div class="developer-credits">
+                        <p>Developed by</p>
+                        <strong>Shreya Karn</strong>
+                        <strong>Puttamma M</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 Stitch - Handmade Embroidery & Painting. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user"></i> Welcome Back</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user-plus"></i> Create Account</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="registerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-credit-card"></i> Checkout</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="checkoutForm">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="checkoutName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="checkoutEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone (WhatsApp)</label>
+                            <input type="tel" class="form-control" id="checkoutPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" id="checkoutAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Order Method</label>
+                            <div class="payment-options">
+                                <div class="payment-option">
+                                    <input type="radio" name="paymentMethod" id="paymentCOD" value="COD" required checked>
+                                    <label for="paymentCOD" class="payment-label">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span>Cash on Delivery</span>
+                                    </label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" name="paymentMethod" id="paymentWhatsApp" value="WhatsApp" required>
+                                    <label for="paymentWhatsApp" class="payment-label">
+                                        <i class="fab fa-whatsapp"></i>
+                                        <span>Order via WhatsApp</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-check"></i> Place Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
